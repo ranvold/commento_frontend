@@ -1,59 +1,74 @@
-import { createBrowserRouter } from "react-router"
 import { RouterProvider } from "react-router/dom"
+import { QueryClientProvider } from "@tanstack/react-query"
+import { queryClient } from "./api/client"
+
+import { createBrowserRouter } from "react-router"
 
 import RootLayout from "./pages/Root"
 import ErrorPage from "./pages/Error"
-import { tokenLoader, checkAuthLoader } from "./utils/auth"
-import HomePage from "./pages/Home"
-import homeLoader from "./pages/home.loader"
+
+import loginAction from "./actions/login"
 import LoginPage from "./pages/Login"
-import loginAction from "./pages/login.action"
+
+import requireGuestLoader from "./loaders/requireGuest"
+import signupAction from "./actions/signup"
 import SignupPage from "./pages/Signup"
-import signupAction from "./pages/signup.action"
+
+import authenticatedLoader from "./loaders/authenticated"
+
+import HomePage from "./pages/Home"
+
 import NotificationsPage from "./pages/Notifications"
-import notificationsLoader from "./pages/notifications.loader"
-import logoutAction from "./pages/logout.action"
+
+import logoutAction from "./actions/logout"
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
     errorElement: <ErrorPage />,
-    id: "root",
-    loader: tokenLoader,
     children: [
       {
-        index: true,
-        element: <HomePage />,
-        loader: homeLoader,
-      },
-      {
         path: "login",
-        element: <LoginPage />,
+        loader: requireGuestLoader,
         action: loginAction,
+        element: <LoginPage />,
       },
       {
         path: "signup",
-        element: <SignupPage />,
+        loader: requireGuestLoader,
         action: signupAction,
+        element: <SignupPage />,
       },
       {
-        path: "notifications",
-        element: <NotificationsPage />,
-        loader: notificationsLoader,
-      },
-      {
-        path: "logout",
-        element: null,
-        loader: checkAuthLoader,
-        action: logoutAction,
+        id: "authenticated",
+        loader: authenticatedLoader,
+        children: [
+          {
+            index: true,
+            element: <HomePage />,
+          },
+          {
+            path: "notifications",
+            element: <NotificationsPage />,
+          },
+          {
+            path: "logout",
+            action: logoutAction,
+            element: null,
+          },
+        ],
       },
     ],
   },
 ])
 
 function App() {
-  return <RouterProvider router={router} />
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  )
 }
 
 export default App
