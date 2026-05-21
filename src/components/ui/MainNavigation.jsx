@@ -1,7 +1,10 @@
-import { Form, Link, useRouteLoaderData } from "react-router"
+import { useFetcher, Link } from "react-router"
+import { getAuthToken } from "../../utils/authToken"
 
 function MainNavigation() {
-  const token = useRouteLoaderData("root")
+  const isUserLoggedIn = getAuthToken()
+
+  const fetcher = useFetcher()
 
   return (
     <header className="bg-gray-800 p-4">
@@ -13,7 +16,7 @@ function MainNavigation() {
         </div>
 
         <div>
-          {token ? (
+          {isUserLoggedIn ? (
             <div className="flex">
               <Link
                 className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
@@ -21,11 +24,11 @@ function MainNavigation() {
               >
                 Notifications
               </Link>
-              <Form method="post" action="/logout">
+              <fetcher.Form method="post" action="/logout">
                 <button className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                   Logout
                 </button>
-              </Form>
+              </fetcher.Form>
             </div>
           ) : (
             <div className="flex">

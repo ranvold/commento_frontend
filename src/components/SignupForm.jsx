@@ -33,7 +33,7 @@ function SignupForm() {
               Username
             </label>
             <input
-              aria-invalid={Boolean(actionData?.message?.username)}
+              aria-invalid={Boolean(actionData?.errors?.username)}
               className={inputClasses}
               id="username"
               type="text"
@@ -41,9 +41,9 @@ function SignupForm() {
               autoComplete="username"
               required
             />
-            {actionData?.message?.username && (
+            {actionData?.errors?.username && (
               <p className="rounded-2xl bg-rose-50 px-3 py-2 text-sm text-rose-700">
-                {actionData.message.username}
+                {actionData.errors.username}
               </p>
             )}
           </div>
@@ -74,9 +74,9 @@ function SignupForm() {
               autoComplete="new-password"
               required
             />
-            {actionData?.message?.confirmPassword && (
+            {actionData?.errors?.confirmPassword && (
               <p className="rounded-2xl bg-rose-50 px-3 py-2 text-sm text-rose-700">
-                {actionData.message.confirmPassword}
+                {actionData.errors.confirmPassword}
               </p>
             )}
           </div>

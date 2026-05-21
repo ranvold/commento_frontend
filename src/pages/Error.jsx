@@ -1,45 +1,23 @@
-import { useEffect, useRef } from "react"
-import { useRevalidator, useRouteError } from "react-router"
-import MainNavigation from "../components/MainNavigation"
-import { clearAuthToken } from "../utils/auth"
+import { isRouteErrorResponse, useRouteError } from "react-router"
 
-import PageContent from "../components/PageContent"
+import PageContent from "../components/ui/PageContent"
 
 function ErrorPage() {
   const error = useRouteError()
-  const { revalidate } = useRevalidator()
-  const hasHandledUnauthorizedError = useRef(false)
 
-  useEffect(() => {
-    if (error?.status !== 401 || hasHandledUnauthorizedError.current) {
-      return
-    }
-
-    hasHandledUnauthorizedError.current = true
-    clearAuthToken()
-    revalidate()
-  }, [error, revalidate])
-
-  let title = "An error occurred!"
-  let message = "Something went wrong."
-
-  if (error.status === 500) {
-    message = error.data.message
+  if (isRouteErrorResponse(error)) {
+    return (
+      <PageContent title={`${error.status} ${error.statusText}`}>
+        <p>{error.data?.message || "An unexpected error occurred."}</p>
+      </PageContent>
+    )
   }
 
-  if (error.status === 401) {
-    title = "Unauthorized!"
-    message = "You are not authorized to access this page."
-  }
-
-  if (error.status === 404) {
-    title = "Not found!"
-    message = "Could not find resource or page."
-  }
+  const title = error.message || "Something went wrong."
+  const message = "Please try again later."
 
   return (
     <>
-      <MainNavigation />
       <PageContent title={title}>
         <p>{message}</p>
       </PageContent>
