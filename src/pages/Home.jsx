@@ -1,37 +1,46 @@
-import { useRouteLoaderData } from "react-router"
-import { useQuery } from "@tanstack/react-query"
+import { useCommentsQuery } from "@/features/comments/queries/useCommentsQuery"
 
-import { useCommentsParam } from "../hooks/useCommentsParam"
-import { usePageCorrection } from "../hooks/usePageCorrection"
-import { fetchComments } from "../api/comments"
-import { commentKeys } from "../utils/queryKeys"
+import { useCommentsSearchParams } from "@/features/comments/hooks/useCommentsSearchParams"
+import { useCommentsPageCorrection } from "@/features/comments/hooks/useCommentsPageCorrection"
 
-import Comments from "../components/comments/Comments"
-import CommentForm from "../components/comments/CommentForm"
-import CommentSearchInput from "../components/comments/CommentSearchInput"
-import Pagination from "../components/ui/Pagination"
+import CreateComment from "@/features/comments/components/NewComment"
+import CommentList from "@/features/comments/components/CommentList"
+import CommentSearchInput from "@/features/comments/components/CommentSearchInput"
+import Pagination from "@/shared/components/Pagination"
 
 function HomePage() {
-  const { page, query, setPage, setQuery, replacePage } = useCommentsParam()
+  const {
+    page,
+    query,
+    params,
+    setPage,
+    replacePage,
+    setQuery,
+    replaceToFirstPage,
+  } = useCommentsSearchParams()
 
-  const { currentUser } = useRouteLoaderData("authenticated")
-  const { data, isLoading } = useQuery({
-    queryKey: commentKeys.page(page, query),
-    queryFn: () => fetchComments({ page, query }),
+  const commentsQuery = useCommentsQuery(params)
+
+  const comments = commentsQuery.data?.data ?? []
+  const meta = commentsQuery.data?.meta
+
+  useCommentsPageCorrection({
+    commentsCount: comments.length,
+    totalCount: meta?.count ?? 0,
+    previousPage: meta?.previous,
+    replacePage: replacePage,
   })
-
-  usePageCorrection(data, replacePage)
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-8">
-      {currentUser && <CommentForm setFirstPage={() => setPage(1)} />}
-      <CommentSearchInput query={query} setQuery={setQuery} />
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
+      <CreateComment page={page} replaceToFirstPage={replaceToFirstPage} />
+      <CommentSearchInput query={query} onQueryChange={setQuery} />
+      {commentsQuery.isLoading && <p>Loading...</p>}
+      {!commentsQuery.isLoading && commentsQuery.data && (
         <>
-          <Comments comments={data.data} />
-          <Pagination meta={data.meta} onPageChange={setPage} />
+          <CommentList comments={comments} />
+
+          <Pagination meta={meta} onPageChange={setPage} />
         </>
       )}
     </main>
