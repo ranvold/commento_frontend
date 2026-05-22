@@ -1,4 +1,4 @@
-import Notifications from "../components/Notifications"
+import Notifications from "@/features/notifications/components/Notifications"
 
 function NotificationsPage() {
   return <Notifications />

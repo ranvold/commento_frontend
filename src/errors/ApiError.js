@@ -1,4 +1,4 @@
-export class ApiError extends Error {
+class ApiError extends Error {
   constructor(status, data) {
     super(data?.message || "An unexpected API error occurred.")
 
@@ -6,3 +6,5 @@ export class ApiError extends Error {
     this.data = data
   }
 }
+
+export default ApiError
