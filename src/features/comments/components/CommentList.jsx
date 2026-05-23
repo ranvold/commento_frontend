@@ -1,17 +1,14 @@
 import CommentCard from "./CommentCard"
-import { useRouteLoaderData } from "react-router"
+
+import { useAuth } from "@/features/auth/hooks/useAuth"
 
 function CommentList({ comments }) {
-  const { currentUser } = useRouteLoaderData("authenticated")
+  const { user } = useAuth()
 
   return (
     <div>
       {comments.map((comment) => (
-        <CommentCard
-          key={comment.id}
-          comment={comment}
-          currentUser={currentUser}
-        />
+        <CommentCard key={comment.id} comment={comment} user={user} />
       ))}
     </div>
   )

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react"
 import { useSearchParams } from "react-router"
 
-export function useCommentsSearchParams() {
+export function usePaginatedSearchParams() {
   const [searchParams, setSearchParams] = useSearchParams()
   const rawPage = Number(searchParams.get("page"))
 

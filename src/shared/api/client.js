@@ -1,5 +1,5 @@
 import ApiError from "@/errors/ApiError"
-import { getAuthToken, clearAuthToken } from "@/shared/utils/authToken"
+import { clearAuthToken, getAuthToken } from "@/shared/utils/authToken"
 
 const BASE_API_URL = import.meta.env.VITE_API_BASE_URL
 

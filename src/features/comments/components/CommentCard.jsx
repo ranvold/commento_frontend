@@ -2,12 +2,14 @@ import { useState } from "react"
 
 import CommentEditor from "./CommentEditor"
 
+import HighlightedMentions from "@/shared/components/HighlightedMentions"
+
 import {
   useUpdateCommentMutation,
   useDeleteCommentMutation,
 } from "../hooks/useCommentMutations"
 
-function CommentCard({ comment, currentUser }) {
+function CommentCard({ comment, user }) {
   const [isEditing, setIsEditing] = useState(false)
 
   const updateMutation = useUpdateCommentMutation()
@@ -20,7 +22,7 @@ function CommentCard({ comment, currentUser }) {
         onSuccess: () => {
           setIsEditing(false)
         },
-      },
+      }
     )
   }
 
@@ -32,7 +34,8 @@ function CommentCard({ comment, currentUser }) {
     deleteMutation.mutate(comment.id)
   }
 
-  const isOwner = currentUser && currentUser.id === comment.user_id
+  const isOwner = user && user.id === comment.user_id
+  const currentUsername = user?.username
 
   if (isEditing) {
     return (
@@ -51,7 +54,12 @@ function CommentCard({ comment, currentUser }) {
 
   return (
     <div className="rounded border p-4">
-      <p className="whitespace-pre-wrap">{comment.body}</p>
+      <p className="whitespace-pre-wrap">
+        <HighlightedMentions
+          text={comment.body}
+          currentUsername={currentUsername}
+        />
+      </p>
 
       {isOwner && (
         <div className="mt-3 flex gap-3">
