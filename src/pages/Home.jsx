@@ -1,7 +1,7 @@
 import { useCommentsQuery } from "@/features/comments/queries/useCommentsQuery"
 
-import { useCommentsSearchParams } from "@/features/comments/hooks/useCommentsSearchParams"
-import { useCommentsPageCorrection } from "@/features/comments/hooks/useCommentsPageCorrection"
+import { usePaginatedSearchParams } from "@/shared/hooks/usePaginatedSearchParams"
+import { usePageCorrection } from "@/shared/hooks/usePageCorrection"
 
 import CreateComment from "@/features/comments/components/NewComment"
 import CommentList from "@/features/comments/components/CommentList"
@@ -17,18 +17,18 @@ function HomePage() {
     replacePage,
     setQuery,
     replaceToFirstPage,
-  } = useCommentsSearchParams()
+  } = usePaginatedSearchParams()
 
   const commentsQuery = useCommentsQuery(params)
 
   const comments = commentsQuery.data?.data ?? []
   const meta = commentsQuery.data?.meta
 
-  useCommentsPageCorrection({
-    commentsCount: comments.length,
+  usePageCorrection({
+    count: comments.length,
     totalCount: meta?.count ?? 0,
     previousPage: meta?.previous,
-    replacePage: replacePage,
+    replaceToPreviousPage: replacePage,
   })
 
   return (
@@ -40,7 +40,9 @@ function HomePage() {
         <>
           <CommentList comments={comments} />
 
-          <Pagination meta={meta} onPageChange={setPage} />
+          {meta && (meta.next || meta.previous) && (
+            <Pagination meta={meta} onPageChange={setPage} />
+          )}
         </>
       )}
     </main>

@@ -1,4 +1,6 @@
+const commentsAllKey = ["comments"]
+
 export const commentsKeys = {
-  all: ["comments"],
-  list: (params) => [...commentsKeys.all, "list", params],
+  all: commentsAllKey,
+  list: (token, params) => [...commentsAllKey, "list", token ?? null, params],
 }

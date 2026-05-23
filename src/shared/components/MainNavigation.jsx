@@ -1,10 +1,17 @@
-import { useFetcher, Link } from "react-router"
-import { getAuthToken } from "@/shared/utils/authToken"
+import { Link } from "react-router"
+
+import { useAuth } from "@/features/auth/hooks/useAuth"
+import { useLogoutMutation } from "@/features/auth/hooks/useLogoutMutation"
+import { useUnreadNotificationsCount } from "@/features/notifications/queries/useUnreadNotificationsCountQuery"
 
 function MainNavigation() {
-  const isUserLoggedIn = getAuthToken()
-
-  const fetcher = useFetcher()
+  const { isAuthenticated } = useAuth()
+  const logoutMutation = useLogoutMutation()
+  const unreadNotificationsCountQuery =
+    useUnreadNotificationsCount(isAuthenticated)
+  const unreadNotificationsCount =
+    unreadNotificationsCountQuery.data?.unread_count ?? 0
+  const hasUnreadNotifications = unreadNotificationsCount > 0
 
   return (
     <header className="bg-gray-800 p-4">
@@ -16,19 +23,29 @@ function MainNavigation() {
         </div>
 
         <div>
-          {isUserLoggedIn ? (
-            <div className="flex">
+          {isAuthenticated ? (
+            <div className="flex items-center gap-1">
               <Link
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="relative text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 to="/notifications"
               >
                 Notifications
+                {hasUnreadNotifications && (
+                  <span className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-rose-500 px-1.5 py-0.5 text-xs font-semibold leading-none text-white">
+                    {unreadNotificationsCount > 99
+                      ? "99+"
+                      : unreadNotificationsCount}
+                  </span>
+                )}
               </Link>
-              <fetcher.Form method="post" action="/logout">
-                <button className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                  Logout
-                </button>
-              </fetcher.Form>
+              <button
+                type="button"
+                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium disabled:cursor-not-allowed disabled:text-gray-500"
+                disabled={logoutMutation.isPending}
+                onClick={() => logoutMutation.mutate()}
+              >
+                {logoutMutation.isPending ? "Logging out..." : "Logout"}
+              </button>
             </div>
           ) : (
             <div className="flex">

@@ -3,23 +3,19 @@ import { createBrowserRouter } from "react-router"
 import ErrorPage from "@/shared/components/Error"
 import RootLayout from "@/shared/components/Root"
 
-import { loginAction } from "@/features/auth/actions/login"
 import LoginPage from "@/pages/Login"
 
-import { requireGuestLoader } from "@/features/auth/loaders/requireGuestLoader"
-import { signupAction } from "@/features/auth/actions/signup"
+import { guestOnlyLoader } from "@/features/auth/loaders/guestOnlyLoader"
 import SignupPage from "@/pages/Signup"
 
 import {
-  authenticatedLoader,
-  authenticatedShouldRevalidate,
-} from "./authenticatedLoader"
+  requireAuthLoader,
+  requireAuthShouldRevalidate,
+} from "@/features/auth/loaders/requireAuthLoader"
 
 import HomePage from "@/pages/Home"
 
 import NotificationsPage from "@/pages/Notifications"
-
-import { logoutAction } from "@/features/auth/actions/logout"
 
 const router = createBrowserRouter([
   {
@@ -29,20 +25,18 @@ const router = createBrowserRouter([
     children: [
       {
         path: "login",
-        loader: requireGuestLoader,
-        action: loginAction,
+        loader: guestOnlyLoader,
         element: <LoginPage />,
       },
       {
         path: "signup",
-        loader: requireGuestLoader,
-        action: signupAction,
+        loader: guestOnlyLoader,
         element: <SignupPage />,
       },
       {
         id: "authenticated",
-        loader: authenticatedLoader,
-        shouldRevalidate: authenticatedShouldRevalidate,
+        loader: requireAuthLoader,
+        shouldRevalidate: requireAuthShouldRevalidate,
         children: [
           {
             index: true,
@@ -51,11 +45,6 @@ const router = createBrowserRouter([
           {
             path: "notifications",
             element: <NotificationsPage />,
-          },
-          {
-            path: "logout",
-            action: logoutAction,
-            element: null,
           },
         ],
       },
