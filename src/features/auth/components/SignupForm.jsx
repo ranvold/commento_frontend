@@ -28,6 +28,10 @@ function SignupForm() {
   function validate(values) {
     const errors = {}
 
+    if (/\s|@/.test(values.username)) {
+      errors.username = "must be a single word without spaces or @"
+    }
+
     if (values.password !== values.passwordConfirmation) {
       errors.passwordConfirmation = "Passwords do not match"
     }
@@ -38,8 +42,13 @@ function SignupForm() {
   function handleSubmit(event) {
     event.preventDefault()
 
-    const values = formValues
+    const values = {
+      ...formValues,
+      username: formValues.username.trim(),
+    }
     const errors = validate(values)
+
+    setFormValues(values)
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors)
