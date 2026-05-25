@@ -39,6 +39,8 @@ export async function api(path, options = {}) {
 
   if (response.status === 401) {
     clearAuthToken()
+    window.location.replace("/login")
+    return
   }
 
   if (!response.ok) {
