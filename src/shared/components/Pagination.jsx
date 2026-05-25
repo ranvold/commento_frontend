@@ -5,7 +5,7 @@ function Pagination({ meta, onPageChange }) {
         type="button"
         onClick={() => onPageChange(meta.previous)}
         disabled={meta.page === 1}
-        className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+        className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 disabled:hover:bg-slate-300 disabled:focus:ring-0"
       >
         Previous
       </button>
@@ -13,7 +13,7 @@ function Pagination({ meta, onPageChange }) {
         type="button"
         onClick={() => onPageChange(meta.next)}
         disabled={meta.page === meta.pages}
-        className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+        className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 disabled:hover:bg-slate-300 disabled:focus:ring-0"
       >
         Next
       </button>

@@ -38,7 +38,7 @@ function HomePage() {
       {commentsQuery.isLoading && <p>Loading...</p>}
       {!commentsQuery.isLoading && commentsQuery.data && (
         <>
-          <CommentList comments={comments} />
+          <CommentList comments={comments} totalCount={meta?.count} />
 
           {meta && (meta.next || meta.previous) && (
             <Pagination meta={meta} onPageChange={setPage} />

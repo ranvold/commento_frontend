@@ -7,6 +7,7 @@ const mentionClassNames = {
 }
 
 const usernameBadgeClassNames = {
+  self: "inline-flex rounded-md bg-amber-100 px-2 py-0.5 font-semibold text-amber-900 ring-1 ring-inset ring-amber-200",
   info: "inline-flex rounded-md bg-sky-100 px-2 py-0.5 font-semibold text-sky-800 ring-1 ring-inset ring-sky-200",
   alert:
     "inline-flex rounded-md bg-rose-100 px-2 py-0.5 font-semibold text-rose-800 ring-1 ring-inset ring-rose-200",
