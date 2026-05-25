@@ -1,3 +1,5 @@
+import { Link } from "react-router"
+
 function AuthForm({
   eyebrow,
   title,
@@ -9,6 +11,7 @@ function AuthForm({
   isSubmitting,
   submitLabel,
   submittingLabel,
+  alternateAction,
 }) {
   const labelClasses = "block text-sm font-medium text-slate-700"
   const inputClasses =
@@ -70,6 +73,18 @@ function AuthForm({
         >
           {isSubmitting ? submittingLabel : submitLabel}
         </button>
+
+        {alternateAction && (
+          <p className="text-center text-sm text-slate-600">
+            {alternateAction.prompt}{" "}
+            <Link
+              className="font-semibold text-sky-700 transition hover:text-sky-800 focus:outline-none focus:underline"
+              to={alternateAction.to}
+            >
+              {alternateAction.label}
+            </Link>
+          </p>
+        )}
       </form>
     </section>
   )

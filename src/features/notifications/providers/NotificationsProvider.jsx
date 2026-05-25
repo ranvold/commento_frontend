@@ -19,7 +19,7 @@ function NotificationsProvider({ children }) {
 
     const subscription = consumer.subscriptions.create("NotificationsChannel", {
       received(data) {
-        if (data.type === "notification_created") {
+        if (data.type === "mentioning") {
           queryClient.invalidateQueries({
             queryKey: notificationsKeys.all,
           })

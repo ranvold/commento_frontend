@@ -26,7 +26,7 @@ function CommentSearchInput({ query, onQueryChange }) {
   }, [query])
 
   return (
-    <div className="mb-4">
+    <div className="my-4">
       <label className="sr-only" htmlFor="comment-search">
         Search comments
       </label>

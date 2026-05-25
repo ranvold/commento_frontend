@@ -104,6 +104,11 @@ function SignupForm() {
       isSubmitting={isSubmitting}
       submitLabel="Signup"
       submittingLabel="Signing up..."
+      alternateAction={{
+        prompt: "Already have an account?",
+        label: "Login",
+        to: "/login",
+      }}
     />
   )
 }
