@@ -1,4 +1,5 @@
-const mentionPattern = /(^|\s)(@[a-zA-Z0-9_]+)/g
+const mentionPattern =
+  /(?<![A-Za-z0-9_.%+-])@([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|[A-Za-z0-9_]+)/g
 
 const mentionClassNames = {
   self: "rounded-md bg-amber-100 px-1.5 py-0.5 font-medium text-amber-900 ring-1 ring-inset ring-amber-200",
@@ -25,8 +26,8 @@ export function getMentionSegments(text) {
   mentionPattern.lastIndex = 0
 
   while ((match = mentionPattern.exec(text)) !== null) {
-    const [, prefix, mention] = match
-    const mentionStart = match.index + prefix.length
+    const [mention] = match
+    const mentionStart = match.index
 
     if (mentionStart > lastIndex) {
       segments.push({
